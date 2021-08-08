@@ -1,0 +1,16 @@
+{
+  "workbench.colorTheme": "Vue Theme",
+  "editor.tabSize": 2,
+  "vetur.format.defaultFormatter.js": "vscode-typescript",
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "javascript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "vue",
+    "html",
+    "javascript"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
