@@ -1,15 +1,51 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+
+const apiGov = axios.create({
+  baseURL: 'http://api.portaldatransparencia.gov.br',
+  headers: {
+    "key": "chave-api-dados",
+    "value": "d4c7a363175ba7f2c757e5b4d299d527"
+  }
+})
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  state: {
+const state = {
+  ibge: undefined,
+  date: undefined,
+  page: undefined,
+  peoplePerCity: []
+}
+
+const actions = {
+  async getIbge ({ commit }, cep) {
+    const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
+    commit('setIbge', response.data)
   },
-  mutations: {
+  getDate ({ commit }, date) {
+    commit('setDate', date)
   },
-  actions: {
+  getPage ({ commit }, page) {
+    commit('setPage', page)
   },
-  modules: {
+  async getPeople ({ commit }) {
+
+    const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
+    commit('setPeoplePerCity', response.data)
   }
+}
+
+const mutations = {
+  setIbge: (state, ibge) => state.ibge = ibge.ibge,
+  setDate: (state, date) => state.date = date,
+  setPage: (state, page) => state.page = page,
+  setPeoplePerCity: (state, people) => state.peoplePerCity = people
+}
+
+export default new Vuex.Store({
+  state,
+  actions,
+  mutations
 })

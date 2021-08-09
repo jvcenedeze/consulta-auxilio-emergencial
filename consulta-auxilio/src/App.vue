@@ -9,16 +9,23 @@
           <router-view />
         </div>
       </div>
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-12 col-md-8">
+          <List />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {
-  data () {
-    return {
 
-    }
+import List from '@/components/List.vue'
+
+export default {
+  components: {
+    List
   }
 }
 </script>

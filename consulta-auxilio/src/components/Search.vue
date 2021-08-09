@@ -15,6 +15,7 @@
               class="form-control"
               placeholder="Digite o CEP"
               aria-describedby="basic-addon1"
+              @keyup.enter="getIbge($event.target.value)"
             >
           </div>
         </div>
@@ -24,7 +25,14 @@
 </template>
 
 <script>
-export default {
 
+import { mapActions } from 'vuex'
+
+export default {
+  methods: {
+    ...mapActions([
+      'getIbge'
+    ])
+  }
 }
 </script>
