@@ -8,21 +8,24 @@
               <i class="fas fa-map-marked-alt fa-2x"></i>
             </span>
           </div>
-          <input
-            type="text"
+          <the-mask
             class="form-control"
             placeholder="Digite o CEP"
+            :mask="'#####-###'"
             v-model="cep"
-            @keyup.enter.prevent="getPeople($event.target.value)"
-          >
-          <div class="input-group-append">
-            <span class="input-group-text">
-              <button
-                class="btn"
-                @click.prevent="getPeople(cep)"
-              >
-                <i class="fas fa-search fa-2x"></i>
-              </button>
+            @keyup.native.enter="verifyParameters(cep)"
+          />
+          <div class="input-group-append d-flex">
+            <datepicker
+              v-model="state.date"
+              name="uniquename"
+            ></datepicker>
+            <button
+              class="btn"
+              @click="verifyParameters(cep)"
+            >
+              <i class="fas fa-search fa-2x"></i>
+            </button>
             </span>
           </div>
         </div>
@@ -33,18 +36,28 @@
 
 <script>
 
+import Datepicker from 'vuejs-datepicker';
+import { TheMask } from 'vue-the-mask'
 import { mapActions } from 'vuex'
 
 export default {
+  components: {
+    Datepicker,
+    TheMask
+  },
   data () {
     return {
-      cep: null
+      cep: null,
+      error: null
     }
   },
   methods: {
     ...mapActions([
       'getPeople'
-    ])
+    ]),
+    verifyParameters (cep) {
+      this.cep.length == 8 ? this.getPeople(cep) : this.error = 'Por favor coloque 8 dígitos no campo CEP.'
+    }
   }
 }
 </script>
@@ -61,8 +74,11 @@ export default {
 .input-group-prepend,
 .input-group-append {
   span {
-    background-color: #c58de4;
+    background-color: #0009ed50;
     border: none;
+    i {
+      color: #d7d6f5;
+    }
   }
 }
 .input-group-prepend {

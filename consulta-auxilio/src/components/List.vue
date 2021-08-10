@@ -8,7 +8,6 @@
             v-if="people"
           >
             <h3>{{people[0].municipio.nomeIBGE}} - {{people[0].municipio.uf.nome}}</h3>
-            <h3>{{ibge}}</h3>
           </div>
         </div>
       </div>
