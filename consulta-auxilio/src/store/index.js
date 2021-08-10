@@ -12,10 +12,12 @@ const apiGov = axios.create({
 Vue.use(Vuex)
 
 const state = {
+  cep: undefined,
   ibge: undefined,
-  date: 202008,
+  date: 202001,
   page: 1,
-  totalPages: undefined,
+  isLoading: false,
+  totalPeoplePerCity: undefined,
   peoplePerCity: undefined
 }
 
@@ -24,14 +26,29 @@ const actions = {
     const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`)
     commit('setIbge', response.data)
   },
+  async getTotalPeople ({ commit }) {
+    const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=1`)
+    commit('setTotalPeople', response.data[0])
+  },
   getDate ({ commit }, date) {
     commit('setDate', date)
   },
   getPage ({ commit }, page) {
     commit('setPage', page)
   },
+  setPeopleToUndefined ({ commit }) {
+    commit('setPeoplePerCity', undefined)
+  },
   async getPeople ({ dispatch, commit }, cep) {
+    dispatch('setPeopleToUndefined')
     await dispatch('getIbge', cep)
+    await dispatch('getTotalPeople')
+    const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
+    commit('setPeoplePerCity', response.data)
+  },
+  async getPeopleByButton ({ dispatch, commit }, page) {
+    dispatch('setPeopleToUndefined')
+    await dispatch('getPage', page)
     const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
     commit('setPeoplePerCity', response.data)
   }
@@ -41,6 +58,7 @@ const mutations = {
   setIbge: (state, ibge) => state.ibge = ibge.ibge,
   setDate: (state, date) => state.date = date,
   setPage: (state, page) => state.page = page,
+  setTotalPeople: (state, totalPeople) => state.totalPeoplePerCity = totalPeople,
   setPeoplePerCity: (state, people) => state.peoplePerCity = people
 }
 
