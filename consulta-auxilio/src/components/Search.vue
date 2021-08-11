@@ -162,6 +162,10 @@ $background: #eceaf3;
     border-bottom-left-radius: 0;
     cursor: pointer;
   }
+  span.input-group-text {
+    width: 70px;
+    margin-left: -15px;
+  }
 }
 .input-group-append {
   span:active {

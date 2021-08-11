@@ -18,7 +18,8 @@ const state = {
   page: 1,
   isLoading: false,
   totalPeoplePerCity: undefined,
-  peoplePerCity: undefined
+  peoplePerCity: undefined,
+  error: undefined
 }
 
 const actions = {
@@ -43,17 +44,25 @@ const actions = {
     commit('setLoading', payload)
   },
   async getPeople ({ dispatch, commit }, cep) {
-    dispatch('setPeopleToUndefined')
-    await dispatch('getIbge', cep)
-    await dispatch('getTotalPeople')
-    const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
-    commit('setPeoplePerCity', response.data)
+    try {
+      dispatch('setPeopleToUndefined')
+      await dispatch('getIbge', cep)
+      await dispatch('getTotalPeople')
+      const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
+      commit('setPeoplePerCity', response.data)
+    } catch (error) {
+      commit('setError', error)
+    }
   },
   async getPeopleByButton ({ dispatch, commit }, page) {
-    dispatch('setPeopleToUndefined')
-    await dispatch('getPage', page)
-    const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
-    commit('setPeoplePerCity', response.data)
+    try {
+      dispatch('setPeopleToUndefined')
+      await dispatch('getPage', page)
+      const response = await apiGov.get(`/api-de-dados/auxilio-emergencial-beneficiario-por-municipio?codigoIbge=${state.ibge}&mesAno=${state.date}&pagina=${state.page}`)
+      commit('setPeoplePerCity', response.data)
+    } catch (error) {
+      commit('setError', error)
+    }
   }
 }
 
@@ -63,7 +72,8 @@ const mutations = {
   setDate: (state, date) => state.date = date,
   setPage: (state, page) => state.page = page,
   setTotalPeople: (state, totalPeople) => state.totalPeoplePerCity = totalPeople,
-  setPeoplePerCity: (state, people) => state.peoplePerCity = people
+  setPeoplePerCity: (state, people) => state.peoplePerCity = people,
+  setError: (state, error) => state.error = error
 }
 
 export default new Vuex.Store({

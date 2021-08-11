@@ -6,14 +6,15 @@
         <p>Total de {{ totalPeople }} beneficiários encontrados.</p>
       </div>
       <div class="btn-pagination d-flex justify-content-center align-items-center">
-        <button
-          class="btn btn-page m-1 d-flex justify-content-center align-items-center"
-          :class="{'btn-active': index == currentPage}"
-          v-for="index in pages"
-          :key="index"
-          :disabled="isLoading"
-          @click="setPage(index)"
-        >{{ index }}</button>
+        <paginate
+          v-model="page"
+          :pageCount="getTotalPages"
+          :clickHandler="setPage"
+          :hide-prev-next="true"
+          prev-text='<i class="fas fa-chevron-left"></i>'
+          next-text='<i class="fas fa-chevron-right"></i>'
+        >
+        </paginate>
       </div>
     </div>
   </div>
@@ -21,12 +22,16 @@
 
 <script>
 
+import Paginate from 'vuejs-paginate'
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  components: {
+    Paginate
+  },
   data () {
     return {
-      pages: []
+      page: 1
     }
   },
   computed: {
@@ -45,72 +50,55 @@ export default {
       'getPeopleByButton',
       'setLoading'
     ]),
-    showNumberOfPages () {
-      const totalPages = this.getTotalPages
-      if (totalPages < 8) {
-        for (let i = 1; i <= totalPages; i++) {
-          this.pages.push(i)
-        }
-      } else {
-        switch (this.currentPage) {
-          case (this.currentPage <= 4):
-            for (let i = 1; i <= 6; i++) {
-              this.pages.push(i)
-            }
-            this.pages.push('...')
-            this.pages.push(totalPages)
-            break;
-          case this.currentPage >= (this.currentPage - 3):
-            this.pages.push(1)
-            this.pages.push('...')
-            for (let i = (totalPages - 5); i <= totalPages; i++) {
-              this.pages.push(i)
-            }
-            break;
-          default:
-            this.pages.push(1)
-            this.pages.push('...')
-            this.pages.push(this.currentPage - 2)
-            this.pages.push(this.currentPage - 1)
-            this.pages.push(this.currentPage)
-            this.pages.push(this.currentPage + 1)
-            this.pages.push(this.currentPage + 2)
-            this.pages.push('...')
-            this.pages.push(totalPages)
-            break;
-        }
-      }
-      console.log(this.pages)
-    },
-    async setPage (index) {
+    async setPage () {
       this.setLoading(true)
-      await this.getPeopleByButton(index)
-      this.pages = []
-      this.showNumberOfPages(index)
+      await this.getPeopleByButton(this.page)
       this.setLoading(false)
     }
-  },
-  mounted () {
-    this.showNumberOfPages(this.getTotalPages)
   }
 }
 </script>
 
 <style lang="scss">
 $primary: #ab54db;
+$secondary-str: #ab54db70;
 $secondary: #ab54db30;
 
-.btn-page {
-  background-color: $primary;
-  color: white;
-  width: 33px;
-  height: 33px;
-  border-radius: 0.8em;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.btn-active {
-  background-color: $secondary;
-  color: $primary;
+.btn-pagination {
+  margin-left: -30px;
+  ul {
+    display: flex;
+    list-style: none;
+    li {
+      background-color: $primary;
+      width: 33px;
+      height: 33px;
+      border-radius: 0.8em;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      text-decoration: none;
+      color: white;
+      a {
+        text-decoration: none;
+        color: white;
+      }
+    }
+    li.active {
+      background-color: $secondary-str;
+      color: $primary;
+    }
+    li.disabled {
+      background-color: $secondary;
+      a {
+        text-decoration: none;
+        color: white;
+        cursor: default;
+      }
+    }
+  }
 }
 </style>

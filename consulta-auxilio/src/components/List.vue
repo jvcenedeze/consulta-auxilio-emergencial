@@ -13,6 +13,16 @@
       </div>
       <div
         class="row"
+        v-if="translatedError"
+      >
+        <div class="col-12">
+          <div class="alert alert-danger d-flex justify-content-center mt-3 pb-1">
+            <p>{{ translatedError }}</p>
+          </div>
+        </div>
+      </div>
+      <div
+        class="row"
         v-if="people"
       >
         <div
@@ -112,7 +122,8 @@ export default {
       ibge: state => state.ibge,
       people: state => state.peoplePerCity,
       city: state => state.totalPeoplePerCity,
-      isLoading: state => state.isLoading
+      isLoading: state => state.isLoading,
+      translatedError: state => state.error
     })
   }
 }
