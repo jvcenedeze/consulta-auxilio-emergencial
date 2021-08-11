@@ -39,6 +39,9 @@ const actions = {
   setPeopleToUndefined ({ commit }) {
     commit('setPeoplePerCity', undefined)
   },
+  setLoading ({ commit }, payload) {
+    commit('setLoading', payload)
+  },
   async getPeople ({ dispatch, commit }, cep) {
     dispatch('setPeopleToUndefined')
     await dispatch('getIbge', cep)
@@ -56,6 +59,7 @@ const actions = {
 
 const mutations = {
   setIbge: (state, ibge) => state.ibge = ibge.ibge,
+  setLoading: (state, payload) => state.isLoading = payload,
   setDate: (state, date) => state.date = date,
   setPage: (state, page) => state.page = page,
   setTotalPeople: (state, totalPeople) => state.totalPeoplePerCity = totalPeople,

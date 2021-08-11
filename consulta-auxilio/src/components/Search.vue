@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col">
         <div class="input-group shadow">
-          <div class="input-group-prepend">
+          <div class="input-group-prepend d-none d-sm-block">
             <span class="input-group-text">
               <i class="fas fa-map-marked-alt fa-2x"></i>
             </span>
@@ -25,10 +25,14 @@
               minimum-view="month"
               @closed="updateDate"
             ></datepicker>
-            <span class="input-group-text">
+            <span
+              class="input-group-text btn-search"
+              :class="{'disabled': isLoading}"
+            >
               <button
                 class="btn"
                 @click="verifyParameters(cep)"
+                :disabled="isLoading"
               >
                 <i class="fas fa-search fa-2x"></i>
               </button>
@@ -41,6 +45,7 @@
         >
           {{ error }}
         </div>
+
       </div>
     </div>
   </div>
@@ -51,7 +56,7 @@
 import Datepicker from 'vuejs-datepicker';
 import { ptBR } from 'vuejs-datepicker/dist/locale'
 import { TheMask } from 'vue-the-mask'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   components: {
@@ -69,14 +74,19 @@ export default {
         }
       },
       cep: '',
-      error: null,
-      isLoading: false
+      error: null
     }
+  },
+  computed: {
+    ...mapState({
+      isLoading: state => state.isLoading
+    })
   },
   methods: {
     ...mapActions([
       'getDate',
-      'getPeople'
+      'getPeople',
+      'setLoading'
     ]),
     getMonth () {
       return (this.state.date.getMonth() + 1)
@@ -98,9 +108,9 @@ export default {
       }
     },
     async executeAction (cep) {
-      this.isLoading = true
+      this.setLoading(true)
       await this.getPeople(cep)
-      this.isLoading = false
+      this.setLoading(false)
     }
   }
 }
@@ -110,19 +120,22 @@ export default {
 $primary: #ab54db;
 $secondary: #ab54db30;
 $secondary-str: #ab54db80;
+$background: #eceaf3;
 
 .btn:focus {
   box-shadow: none;
 }
 .form-control {
-  background-color: #eceaf3;
+  background-color: $background;
   font-size: 14px;
   font-weight: 500;
 }
 .form-control:focus {
   box-shadow: none;
   border: 1px solid #ced4da;
-  background-color: #eceaf3;
+  background-color: $background;
+  display: flex;
+  justify-content: center;
 }
 
 .input-group-prepend,
@@ -158,9 +171,23 @@ $secondary-str: #ab54db80;
     }
   }
 }
+.input-group-append {
+  span.disabled:active {
+    background-color: $secondary;
+    i {
+      color: $primary;
+    }
+  }
+}
+.input-group-append {
+  span.disabled {
+    cursor: default;
+  }
+}
 #date-picker {
+  width: 140px;
   height: 44px;
-  background-color: #eceaf3;
+  background-color: $background;
   border: 1px solid #ced4da;
 }
 #date-picker:focus-visible {
@@ -169,13 +196,14 @@ $secondary-str: #ab54db80;
 }
 .vdp-datepicker {
   span {
-    background-color: #eceaf3;
+    background-color: $background;
   }
   span:active {
-    background-color: #eceaf3;
+    background-color: $background;
   }
 }
 .vdp-datepicker__calendar {
+  margin-left: -70px;
   span.cell.selected {
     background-color: $primary;
     color: white;
@@ -191,7 +219,7 @@ $secondary-str: #ab54db80;
     span.prev:not(.disabled):hover,
     span.next:not(.disabled):hover,
     span.up:not(.disabled):hover {
-      background-color: #eceaf3;
+      background-color: $background;
     }
   }
 }

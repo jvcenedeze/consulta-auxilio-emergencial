@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-12">
           <div
-            class="d-flex justify-content-center"
+            class="d-flex justify-content-center name-city"
             v-if="city"
           >
             <h3>{{city.municipio.nomeIBGE}} - {{city.municipio.uf.sigla}}</h3>
@@ -17,7 +17,7 @@
       >
         <div
           class="col-12"
-          v-if="people.length == 0"
+          v-if="people.length === 0"
         >
           <div class="alert alert-warning d-flex justify-content-center pb-1">
             <p>Nenhum resultado encontrado!</p>
@@ -33,35 +33,35 @@
               <li class="list-group-item mb-0 pb-0">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-user fa-fw"></i>
-                  <p class="mx-2">Beneficiário: </p>
+                  <p class="mx-2 font-600">Beneficiário: </p>
                   <p>{{ person.beneficiario.nome }}</p>
                 </div>
               </li>
               <li class="list-group-item mb-0 pb-0">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-id-card fa-fw"></i>
-                  <p class="mx-2">CPF: </p>
+                  <p class="mx-2 font-600">CPF: </p>
                   <p>{{ person.beneficiario.cpfFormatado }}</p>
                 </div>
               </li>
               <li class="list-group-item mb-0 pb-0">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-user fa-fw"></i>
-                  <p class="mx-2">Responsável: </p>
+                  <p class="mx-2 font-600">Responsável: </p>
                   <p>{{ person.responsavelAuxilioEmergencial.nome }}</p>
                 </div>
               </li>
               <li class="list-group-item mb-0 pb-0">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-id-card fa-fw"></i>
-                  <p class="mx-2">CPF: </p>
+                  <p class="mx-2 font-600">CPF: </p>
                   <p>{{ person.responsavelAuxilioEmergencial.cpfFormatado }}</p>
                 </div>
               </li>
               <li class="list-group-item mb-0 pb-0">
                 <div class="d-flex align-items-center">
                   <i class="fas fa-hands-helping fa-fw"></i>
-                  <p class="mx-2">Enquadramento: </p>
+                  <p class="mx-2 font-600">Enquadramento: </p>
                   <p>{{ person.enquadramentoAuxilioEmergencial }}</p>
                 </div>
               </li>
@@ -69,12 +69,12 @@
                 <div class="row">
                   <div class="col-6 d-flex align-items-center">
                     <i class="fas fa-money-bill fa-fw"></i>
-                    <p class="mx-2">Valor(R$): </p>
+                    <p class="mx-2 font-600">Valor(R$): </p>
                     <p>{{ person.valor }}</p>
                   </div>
                   <div class="col-6 d-flex align-items-center">
                     <i class="fas fa-calculator fa-fw"></i>
-                    <p class="mx-2">Parcela: </p>
+                    <p class="mx-2 font-600">Parcela: </p>
                     <p>{{ person.numeroParcela }}</p>
                   </div>
                 </div>
@@ -84,10 +84,19 @@
         </div>
       </div>
       <div
-        class="col-12"
+        class="row"
         v-if="isLoading"
       >
-
+        <div class="col">
+          <div class="d-flex justify-content-center">
+            <div
+              class="spinner-border spinner-custom my-5"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -110,6 +119,19 @@ export default {
 </script>
 
 <style lang="scss">
+$primary: #ab54db;
+
+.name-city {
+  h3 {
+    font-weight: 600;
+  }
+}
+.spinner-custom {
+  color: $primary;
+  height: 3rem;
+  width: 3rem;
+}
+
 .card {
   border-radius: 1em;
   ul {
@@ -123,8 +145,11 @@ export default {
     }
     li {
       padding-top: 15px;
+      p.font-600 {
+        font-weight: 600;
+      }
       i {
-        margin-top: -13px;
+        margin-top: -16px;
       }
     }
   }

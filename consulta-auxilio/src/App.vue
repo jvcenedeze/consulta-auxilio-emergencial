@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <div class="container-fluid">
-      <div class="row pt-4">
+      <div class="row pt-2">
         <div class="col-md-2"></div>
         <div class="col-12 col-md-8">
-          <div class="d-flex justify-content-center mt-3 mb-3">
-            <h2>CONSULTA DE AUXÍLIO EMERGENCIAL</h2>
+          <div class="d-flex flex-column text-center my-3 header-h2">
+            <h4>CONSULTA DE</h4>
+            <h2>AUXÍLIO EMERGENCIAL</h2>
           </div>
           <!-- <div class="d-flex justify-content-around">
             <router-link to="/buscar-auxilio">Buscar Auxílio</router-link> |
@@ -44,22 +45,27 @@ export default {
   },
   computed: {
     ...mapState({
-      totalPeoplePerCity: state => state.totalPeoplePerCity
+      peoplePerCity: state => state.peoplePerCity,
+      totalPeoplePerCity: state => state.totalPeoplePerCity,
+      isLoading: state => state.isLoading
     })
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
   max-height: 100%;
   background-color: #f3f2f7;
-  /* background: linear-gradient(
-    90deg,
-    rgba(10, 71, 214, 1) 0%,
-    rgba(0, 134, 237, 1) 100%
-  ); */
+  .header-h2 {
+    h4 {
+      font-weight: 600;
+    }
+    h2 {
+      font-weight: 800;
+    }
+  }
 }
 </style>
