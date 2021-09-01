@@ -1,4 +1,7 @@
 # consulta-auxilio
+```
+Projeto destinado a consulta do auxílio emergencial pelo CEP.
+```
 
 ## Instalar dependências
 ```
